@@ -8,7 +8,12 @@ using Unity.MLAgents.Actuators;
 public class MyAgent : Agent
 {
     [SerializeField]
-    Vector3 enemyPosition; 
+    Vector3 enemyPosition;
+
+    public override void OnEpisodeBegin()
+    {
+        //reset scene and episode parameters
+    }
 
     public override void CollectObservations(VectorSensor sensor)
     {
@@ -46,5 +51,19 @@ public class MyAgent : Agent
     void Update()
     {
         
+    }
+
+    override void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("target"))
+        {
+            SetReward(10000.0f);
+            EndEpisode();
+        }
+        else if (collision.gameObject.CompareTag("wall"))
+        {
+            SetReward(-10000.0f);
+            EndEpisode();
+        }
     }
 }
